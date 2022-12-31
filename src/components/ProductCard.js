@@ -1,14 +1,16 @@
 import React from "react";
 import { BiListPlus } from "react-icons/bi";
 import { FaTrashAlt } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 import { useLocation } from "react-router-dom";
+import { addToCart, removeFromCart } from "../features/cart/cartSlice";
 
 
 const ProductCard = ({ product }) => {
 
 
-  const dispatch = ''
+  const dispatch = useDispatch()
 
   const { pathname } = useLocation()
 
@@ -38,6 +40,7 @@ const ProductCard = ({ product }) => {
           !pathname.includes('cart') &&
         <button
           className='bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold'
+          onClick={() => dispatch(addToCart(product))}
         >
           Add to cart
         </button>
@@ -61,7 +64,7 @@ const ProductCard = ({ product }) => {
           >
             Make Payment
           </button>
-          <FaTrashAlt  className="cursor-pointer text-red-600" size={30}/>
+          <FaTrashAlt onClick={() => dispatch(removeFromCart(product))} className="cursor-pointer text-red-600" size={30}/>
           </>
         }
       </div>

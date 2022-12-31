@@ -1,13 +1,18 @@
 import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState , useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
+import { toggle, toggleBrands } from "../features/filter/filterSlice";
+
 
 
 const Home = () => {
 
-
-const [products, setProducts] = useState([])
+  const dispatch = useDispatch()
+  const [products, setProducts] = useState([]);
+  const filter = useSelector(state => state.filter);
+  const {stock, brands} = filter;
+  console.log(filter);
 
   useEffect(() => {
     (
@@ -27,14 +32,23 @@ const [products, setProducts] = useState([])
       <ProductCard key={product.model} product={product} />
     ))
   }
-  if (products.length ) {
+  if (products.length && (stock || brands.length)) {
     content = products
-    .filter(product => {
-      return product
-    })
-    .map((product) => (
-      <ProductCard key={product.model} product={product} />
-    ))
+      .filter(product => {
+        if(stock){
+          return product.status === true
+        }
+        return product
+      })
+      .filter(product => {
+        if(brands.length){
+          return brands.includes(product.brand)
+        }
+        return product
+      })
+      .map((product) => (
+        <ProductCard key={product.model} product={product} />
+      ))
   }
 
   return (
@@ -42,13 +56,16 @@ const [products, setProducts] = useState([])
       <div className='mb-10 flex justify-end gap-5'>
         <button
           className={`border px-3 py-2 rounded-full font-semibold `}
+          onClick={() => dispatch(toggle())}
         >
           In Stock
         </button>
-        <button className={`border px-3 py-2 rounded-full font-semibold `}>
+        <button className={`border px-3 py-2 rounded-full font-semibold `}
+          onClick={() => dispatch(toggleBrands('amd'))}>
           AMD
         </button>
-        <button  className={`border px-3 py-2 rounded-full font-semibold `}>
+        <button className={`border px-3 py-2 rounded-full font-semibold `}
+          onClick={() => dispatch(toggleBrands('intel'))}>
           Intel
         </button>
       </div>
