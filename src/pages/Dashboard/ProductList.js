@@ -4,14 +4,14 @@ import { removeProduct } from "../../features/products/productsSlice";
 
 
 const ProductList = () => {
-  // const [products, setProducts] = useState([]);
-  const {products, isLosding} = useSelector(state => state.products)
+  const [products, setProducts] = useState([]);
+  // const {products, isLosding} = useSelector(state => state.products)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    // fetch("http://localhost:8000/products")
-    //   .then((res) => res.json())
-    //   .then((data) => setProducts(data));
+    fetch("http://localhost:8000/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
   }, []);
 
   console.log(products)
@@ -74,7 +74,9 @@ const ProductList = () => {
                   </td>
                   <td class='p-2'>
                     <div class='flex justify-center'>
-                      <button onClick={() => dispatch(removeProduct(_id))}>
+                      <button 
+                      // onClick={() => dispatch(removeProduct(_id))}
+                      >
                         <svg
                           class='w-8 h-8 hover:text-blue-600 rounded-full hover:bg-gray-100 p-1'
                           fill='none'

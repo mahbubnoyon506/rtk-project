@@ -1,7 +1,8 @@
 import React from "react";
-import { useState , useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
+import { useGetProductsQuery } from "../features/api/apiSlice";
 import { toggle, toggleBrands } from "../features/filter/filterSlice";
 import { getProducts } from "../features/products/productsSlice";
 
@@ -10,20 +11,30 @@ import { getProducts } from "../features/products/productsSlice";
 const Home = () => {
 
   const dispatch = useDispatch()
-  // const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const filter = useSelector(state => state.filter);
-  const {products, isLoading} = useSelector(state => state.products);
-  const {stock, brands} = filter;
-  console.log(products);
+  // const { products, isLoading } = useSelector(state => state.products);
+  const { stock, brands } = filter;
+  
+  // useEffect(() => {
+    //   fetch("http://localhost:8000/products")
+    //     .then((res) => res.json())
+    //     .then((data) => setProducts(data));
+    //   dispatch(getProducts())
+    // }, [dispatch])
+    
+    const {data, isLoading, isSuccess, isError, error} = useGetProductsQuery()
 
-  useEffect(() => {
-    dispatch(getProducts())
-  }, [dispatch])
+    console.log(data);
 
 
   const activeClass = "text-white  bg-indigo-500 border-white";
   let content = '';
-  if(isLoading){
+  useEffect(() => {
+    setTimeout(() => {
+    }, 1000);
+  }, [])
+  if (isLoading) {
     content = <h2>Loading...</h2>
   }
   if (products?.length) {
@@ -34,13 +45,13 @@ const Home = () => {
   if (products.length && (stock || brands.length)) {
     content = products
       .filter(product => {
-        if(stock){
+        if (stock) {
           return product.status === true
         }
         return product
       })
       .filter(product => {
-        if(brands.length){
+        if (brands.length) {
           return brands.includes(product.brand)
         }
         return product
