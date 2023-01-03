@@ -9,32 +9,34 @@ import { getProducts } from "../features/products/productsSlice";
 
 
 const Home = () => {
-
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const [products, setProducts] = useState([]);
   const filter = useSelector(state => state.filter);
   // const { products, isLoading } = useSelector(state => state.products);
   const { stock, brands } = filter;
-  
-  // useEffect(() => {
-    //   fetch("http://localhost:8000/products")
-    //     .then((res) => res.json())
-    //     .then((data) => setProducts(data));
-    //   dispatch(getProducts())
-    // }, [dispatch])
-    
-    const {data, isLoading, isSuccess, isError, error} = useGetProductsQuery()
 
-    console.log(data);
+  useEffect(() => {
+    fetch("http://localhost:8000/products")
+      .then((res) => res.json())
+      .then((data) => setProducts(data));
+    dispatch(getProducts())
+  }, [dispatch])
+
+  // const {products} = useGetProductsQuery();
+  console.log(products);
+
 
 
   const activeClass = "text-white  bg-indigo-500 border-white";
   let content = '';
   useEffect(() => {
+    setLoading(true)
     setTimeout(() => {
-    }, 1000);
+      setLoading(false)
+    }, 2000);
   }, [])
-  if (isLoading) {
+  if (loading) {
     content = <h2>Loading...</h2>
   }
   if (products?.length) {

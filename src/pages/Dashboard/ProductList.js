@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRemoveProductMutation } from "../../features/api/apiSlice";
 import { removeProduct } from "../../features/products/productsSlice";
 
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   // const {products, isLosding} = useSelector(state => state.products)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [removeProduct] =useRemoveProductMutation()
 
   useEffect(() => {
     fetch("http://localhost:8000/products")
